@@ -19,6 +19,8 @@ public class EnemyCtrl : MonoBehaviour
 
 	public Transform child;
 
+	public AudioSource audioplayer;
+
 	void Start()
     {
 		f_worldHeight = Camera.main.orthographicSize;
@@ -36,13 +38,11 @@ public class EnemyCtrl : MonoBehaviour
 		
 		f_moveTimer += Time.deltaTime;
 		transform.position = new Vector2(transform.position.x, Mathf.Lerp(startPos.y, endPos.y, f_moveTimer / f_moveTime));
-		print("workds");
 		if (f_moveTimer > f_moveTime)
 		{
-			print("reset");
 			f_moveTimer = 0;
 
-			f_moveTime = Random.Range(1.0f, 2.0f);
+			f_moveTime = Random.Range(1.5f, 3.0f);
 			endPos = new Vector2(transform.position.x, Random.Range(-f_worldWidth + child.GetComponent<SpriteRenderer>().size.y,
 														f_worldWidth - child.GetComponent<SpriteRenderer>().size.y));
 			startPos = transform.position;
@@ -70,6 +70,7 @@ public class EnemyCtrl : MonoBehaviour
 	{
 		if (b_playing && collision.gameObject.tag == "cowshot")
 		{
+			audioplayer.Play();
 			collision.gameObject.SetActive(false);
 			i_hits++;
 		}

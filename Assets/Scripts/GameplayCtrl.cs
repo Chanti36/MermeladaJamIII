@@ -140,7 +140,7 @@ public class GameplayCtrl : MonoBehaviour
 			else if (i < (i_size / 3) * 2) f_spd = spd2;
 			else f_spd = spd3;
 
-			pool[i].transform.position = pool[i].transform.position - new Vector3(1, 0, 0) * (f_spd / 2) * player.GetXSpeed();
+			pool[i].transform.position = pool[i].transform.position - new Vector3(1, 0, 0) * (f_spd / 2) * player.GetXSpeed() * 5;
 
 			if (pool[i].transform.position.x < -f_worldWidth - 2)
 				pool[i].transform.position = new Vector3(f_worldWidth + 2, Random.Range(-f_worldHeight - 1, f_worldHeight + 1), 10);
@@ -152,13 +152,13 @@ public class GameplayCtrl : MonoBehaviour
 		{
 			if (cowPool[i].activeInHierarchy)
 			{
-				cowPool[i].transform.position = cowPool[i].transform.position - new Vector3(1, 0, 0) * spd1 * player.GetXSpeed();
+				cowPool[i].transform.position = cowPool[i].transform.position - new Vector3(1, 0, 0) * spd1 * player.GetXSpeed() * 5;
 				if (cowPool[i].transform.position.x < -f_worldWidth - 2)
 					cowPool[i].SetActive(false);
 			}
 			if (meteoritePool[i].activeInHierarchy)
 			{
-				meteoritePool[i].transform.position = meteoritePool[i].transform.position - new Vector3(1, 0, 0) * spd1 * player.GetXSpeed();
+				meteoritePool[i].transform.position = meteoritePool[i].transform.position - new Vector3(1, 0, 0) * spd1 * player.GetXSpeed() * 5;
 				if (meteoritePool[i].transform.position.x < -f_worldWidth - 2)
 					meteoritePool[i].SetActive(false);
 			}
@@ -170,8 +170,8 @@ public class GameplayCtrl : MonoBehaviour
 		//SPAWN
 		if (player.GetXSpeed() > 0)
 		{
-			metDist += player.GetXSpeed() * 0.1f;
-			cowDist += player.GetXSpeed() * 0.1f;
+			metDist += player.GetXSpeed() * 0.4f;
+			cowDist += player.GetXSpeed() * 0.4f;
 
 			if (metDist >= metSpawnDist)
 			{			
@@ -200,7 +200,7 @@ public class GameplayCtrl : MonoBehaviour
 					prefab.transform.position = new Vector3(f_worldWidth + 2,
 															Random.Range(-f_worldHeight + prefab.GetComponent<SpriteRenderer>().size.y,
 															f_worldHeight - prefab.GetComponent<SpriteRenderer>().size.y),
-															10);
+															9);
 					prefab.SetActive(true);
 				}
 			}

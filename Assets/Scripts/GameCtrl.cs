@@ -23,17 +23,19 @@ public class GameCtrl : MonoBehaviour
 
 	string[] introTxt = 
 	{
-		"intro",
-		"parece que todo se ha acabado",
-		"o no?"
+		"Parece que todo se ha acabado",
+		"Mis pobres vacas, esparcidas por el espacio",
+		"Debería intentar recogerlas"
 	};
 
 	string[] plotTwistTxt =
 	{
-		"plot twist",
-		"un millonario habia comprado el mundo" ,
-		"os ha hechado a todos",
-		"que hace ahí?¿?¿¿¿?"
+		"Ese maldito lunático",
+		"Nadie pensó que realmente compraría el mundo",
+		"¿Y para qué?, Para echarnos a todos y exhibirlo en su maldia colección",
+		"Espera un momento",
+		"¿Que está haciendo ahí?",
+		"Se va a enterar ese desgraciado"
 	};
 
 	//intro fade
@@ -41,8 +43,17 @@ public class GameCtrl : MonoBehaviour
 	private float introLerp = 0;
 	private float outroLerp = 0;
 
+
+	float playerlerptimer = 0;
+	float playerstartangle;
+
+	public Sprite winSpr, loseSpr;
+
 	private void Awake()
 	{
+		QualitySettings.vSyncCount = 1;
+		Application.targetFrameRate = 30;
+
 		textCtrl = GetComponent<TextCtrl>();
 
 		gameScene = 0;
@@ -69,10 +80,10 @@ public class GameCtrl : MonoBehaviour
 		}
 		if (gameScene == 1) //INTRO
 		{
-			if( introLerp < 3)
+			if( introLerp < 4)
 			{
 				introLerp += Time.deltaTime;
-				introFade.color = new Color(introFade.color.r, introFade.color.g, introFade.color.b, Mathf.Lerp(.6f, 0, introLerp / 3));
+				introFade.color = new Color(introFade.color.r, introFade.color.g, introFade.color.b, Mathf.Lerp(1, 0, introLerp / 4));
 			}
 
 			if (textCtrl.b_onText == false && Input.anyKey)
@@ -95,6 +106,7 @@ public class GameCtrl : MonoBehaviour
 
 					textScene.SetActive(true);
 					textCtrl.StartText(plotTwistTxt, false);
+					playerstartangle = player.spriteTr.localEulerAngles.z;
 				}
 			}
 		}
@@ -116,6 +128,13 @@ public class GameCtrl : MonoBehaviour
 				player.i_gameState = 2;
 				enemy.StartFight();
 			}
+			if (playerlerptimer < 1)
+			{
+				playerlerptimer += Time.deltaTime;
+				player.spriteTr.localEulerAngles = new Vector3(0, 0, Mathf.Lerp(playerstartangle, 0, playerlerptimer));
+			}
+			else
+				player.spriteTr.localEulerAngles = new Vector3(0, 0, 0);
 		}
 		if (gameScene == 4) //GAME PART 2
 		{
@@ -124,30 +143,38 @@ public class GameCtrl : MonoBehaviour
 
 			if (GetComponent<GameplayCtrl>().i_ending != 0)
 			{
+				if (GetComponent<GameplayCtrl>().i_ending == 1)
+					endingScene.GetComponent<Image>().sprite = loseSpr;
+				else
+					endingScene.GetComponent<Image>().sprite = winSpr;
 				gameScene = 5;
-				//kek
+				enemy.GetComponent<BoxCollider2D>().enabled = false;	
 			}
 		}
 		if (gameScene == 5) //ENDING
 		{
-			outroLerp += Time.deltaTime;
 			if (outroLerp < 2)
 			{
+				outroLerp += Time.deltaTime * 2;
 				introFade.color = new Color(introFade.color.r, introFade.color.g, introFade.color.b, Mathf.Lerp(0, 1, outroLerp / 2));
 			}
 			else
 			{
-				endingScene.SetActive(true);
-				introFade.gameObject.SetActive(false);
+				if (outroLerp < 4)
+				{
+					endingScene.SetActive(true);
+					introFade.gameObject.SetActive(false);
 
-				if (outroLerp > 3 )
+					if (Input.anyKeyDown)
+						outroLerp = 20;
+				}
+				else
 				{
 					gameScene = 6;
 					creditsScene.SetActive(true);
 					endingScene.SetActive(false);
 				}
 			}
-			print("endinggggg");
 		}
 		if (gameScene == 6) //CREDITS
 		{
@@ -157,12 +184,9 @@ public class GameCtrl : MonoBehaviour
 	}
 }
 
-
 //TODO LIST
-/*
+/*txts
  * 2021.3.16
  * ajustar la aparicion del enemigo a su frase AQUI conel txt index
- * back to recoger 6 vacas en gamepart1 AQUI Y EN GAMEPLAY DONDE DEEJEN DE APARECER
- * cowsprite when spawning both in gameplay and player
- * enemy pivot has the script so do the hitbox
+
  */

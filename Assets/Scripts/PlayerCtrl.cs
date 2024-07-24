@@ -32,6 +32,13 @@ public class PlayerCtrl : MonoBehaviour
 
 	public Transform spriteTr;
 
+	public AudioClip[] cowSounds;
+	public AudioClip[] hitSounds;
+
+	public AudioSource cowSound;
+	public AudioSource hitSound;
+
+
 	void Start()
     {
 		f_worldHeight = Camera.main.orthographicSize;
@@ -53,7 +60,7 @@ public class PlayerCtrl : MonoBehaviour
 
 		}
 		
-		shootDelay = 0.5f;
+		shootDelay = 1;
 		shootTimer = 0;
 	}
 
@@ -102,7 +109,6 @@ public class PlayerCtrl : MonoBehaviour
 			endAngle = Random.Range(0, 360);
 			angleLerpTimer = 0;
 			angleLerpTime = Random.Range(0.5f, 2.0f);
-			print("endangle = " + endAngle);
 		}
 
 
@@ -220,12 +226,18 @@ public class PlayerCtrl : MonoBehaviour
 	{
 		if (collision.gameObject.tag == "cow")
 		{
+			cowSound.clip = cowSounds[Random.Range(0, cowSounds.Length)];
+			cowSound.Play();
+
 			collision.gameObject.SetActive(false);
 			gameplayCtrl.i_cowCount++;
 			cowCount++;
 		}
 		else if (collision.gameObject.tag == "asteroid")
 		{
+			hitSound.clip = hitSounds[Random.Range(0, hitSounds.Length)];
+			hitSound.Play();
+
 			collision.gameObject.GetComponent<CircleCollider2D>().enabled = false;
 			Camera.main.GetComponent<CameraCtrl>().DoShake(.2f, 1);
 			xSpeed = 0;
