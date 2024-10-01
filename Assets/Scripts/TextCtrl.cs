@@ -62,8 +62,9 @@ public class TextCtrl : MonoBehaviour
 		//inputs
 		if(	Input.GetKey(KeyCode.RightArrow)||
 			Input.GetKey(KeyCode.DownArrow)	||
-			Input.GetKey(KeyCode.LeftArrow)	||
-			Input.GetKey(KeyCode.UpArrow))
+			Input.GetKey(KeyCode.LeftArrow) ||
+			Input.GetKey(KeyCode.UpArrow) ||
+			Input.GetKey(KeyCode.Space))
 		{
 			f_charTime = f_charTimeVal * .3f;
 			f_phraseTime = f_phraseTimeVal * .3f;
@@ -100,7 +101,8 @@ public class TextCtrl : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.RightArrow) ||
 			Input.GetKeyDown(KeyCode.DownArrow)  ||
 			Input.GetKeyDown(KeyCode.LeftArrow)  ||
-			Input.GetKeyDown(KeyCode.UpArrow))
+			Input.GetKeyDown(KeyCode.UpArrow)	 ||
+			Input.GetKeyDown(KeyCode.Space))
 			f_phraseTimer = f_phraseTime;
 
 		if (f_phraseTimer < f_phraseTime)

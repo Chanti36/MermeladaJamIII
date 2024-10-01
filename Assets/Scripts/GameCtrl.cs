@@ -21,14 +21,21 @@ public class GameCtrl : MonoBehaviour
 	[SerializeField] private Animator adviceAnim;
 	private bool b_adviced;
 
-	string[] introTxt = 
+	string[] introTxtESP =
 	{
 		"Parece que todo se ha acabado",
 		"Mis pobres vacas, esparcidas por el espacio",
 		"Debería intentar recogerlas"
 	};
 
-	string[] plotTwistTxt =
+	string[] introTxtENG =
+	{
+		"It looks like it's all over",
+		"My poor cows, scattered through space",
+		"I should try to collect them"
+	};
+
+	string[] plotTwistTxtESP =
 	{
 		"Ese maldito lunático",
 		"Nadie pensó que realmente compraría el mundo",
@@ -36,6 +43,16 @@ public class GameCtrl : MonoBehaviour
 		"Espera un momento",
 		"¿Que está haciendo ahí?",
 		"Se va a enterar ese desgraciado"
+	};
+
+	string[] plotTwistTxtENG =
+	{
+		"That damn lunatic",
+		"No one thought it would actually buy the world",
+		"And for what, to throw us all out and display it in his damn collection?",
+		"Wait a moment",
+		"What is he doing there?",
+		"That bastard is going to find out"
 	};
 
 	//intro fade
@@ -49,8 +66,12 @@ public class GameCtrl : MonoBehaviour
 
 	public Sprite winSpr, loseSpr;
 
+	public bool b_languajeESP;
+	public Text txt_start;
+
 	private void Awake()
 	{
+		b_languajeESP = false;
 		QualitySettings.vSyncCount = 1;
 		Application.targetFrameRate = 30;
 
@@ -66,16 +87,31 @@ public class GameCtrl : MonoBehaviour
 		b_adviced = false;
 	}
 
+	public void LanguajeESP()
+	{
+		b_languajeESP = true;
+		txt_start.text = "Elige el idioma y \n pulsa espacio para empezar \n Controles: flechas para moverse";
+	}
+
+	public void LanguajeENG()
+	{
+		b_languajeESP = false;
+		txt_start.text = "Select Languaje\r\nAnd press space to start \n Controls: arrows to move";
+	}
+
 	private void Update()
 	{
 		if (gameScene == 0) //TITLE
 		{
-			if (Input.anyKeyDown)
+			if (Input.GetKeyUp(KeyCode.Space))
 			{
 				titleScene.SetActive(false);
 				textScene.SetActive(true);
 				gameScene = 1;
-				textCtrl.StartText(introTxt, false);
+				if (b_languajeESP)
+					textCtrl.StartText(introTxtESP, false);
+				else
+					textCtrl.StartText(introTxtENG, false);
 			}
 		}
 		if (gameScene == 1) //INTRO
@@ -105,7 +141,10 @@ public class GameCtrl : MonoBehaviour
 					player.b_playing = false;
 
 					textScene.SetActive(true);
-					textCtrl.StartText(plotTwistTxt, false);
+					if (b_languajeESP)
+						textCtrl.StartText(plotTwistTxtESP, false);
+					else
+						textCtrl.StartText(plotTwistTxtENG, false);
 					playerstartangle = player.spriteTr.localEulerAngles.z;
 				}
 			}
